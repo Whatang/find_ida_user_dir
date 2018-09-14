@@ -1,5 +1,5 @@
 from setuptools import setup
-with open("../README.md", "r") as readme:
+with open("README.md", "r") as readme:
     long_description = readme.read()
 setup(name="find_ida_user_dir",
       version="0.1",
