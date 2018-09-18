@@ -6,3 +6,5 @@ user_dir = find_ida_user_dir.find_path()
 ```
 
 `find_ida_user_dir` first checks for the existence of an `IDAUSR` environment variable: if it is present, that is returned. If not, the correct path of the default user directory as described in the [IDA Pro documentation](https://www.hex-rays.com/products/ida/support/idadoc/1375.shtml) is returned.
+
+`find_ida_user_dir` is useful for creating installation scripts for IDA plugins which need to identify the IDA user directory so that they know where to copy the plugin module to.
