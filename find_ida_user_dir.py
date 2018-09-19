@@ -41,7 +41,8 @@ def find_path(subdir=None):
     else:
         path = _find_starnix()
     if subdir is not None:
-        path = os.pathsep.join(map(_add_subdir, path.split(os.pathsep)))
+        path = os.pathsep.join(_add_subdir(single_path, subdir)
+                               for single_path in path.split(os.pathsep))
     return path
 
 
