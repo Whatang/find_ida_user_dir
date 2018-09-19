@@ -2,7 +2,7 @@ from setuptools import setup
 with open("README.md", "r") as readme:
     long_description = readme.read()
 setup(name="find_ida_user_dir",
-      version="0.1",
+      version="0.2",
       py_modules=["find_ida_user_dir"],
       description="Find the user directory for IDA Pro in a platform-independent way",
       long_description=long_description,

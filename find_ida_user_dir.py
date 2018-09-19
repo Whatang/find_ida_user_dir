@@ -19,14 +19,30 @@ def _find_starnix():
         return os.path.join(path, '.idapro')
 
 
-def find_path():
+def _add_subdir(path, subdir):
+    return os.path.join(path, subdir)
+
+
+def find_path(subdir=None):
+    """Find the IDA user directory for the current user on the current platform.
+
+    Returns the path to the IDA user directory. No guarantee is made of the
+    existence of the directory, but is is the correct path as defined by the
+    IDA documentation.
+
+    If subdir is given then the path to that subdirectory of the IDA user
+    directory is returned.
+    """
     path = os.getenv("IDAUSR")
     if path:
-        return path
+        pass
     elif os.name == "nt":
-        return _find_windows()
+        path = _find_windows()
     else:
-        return _find_starnix()
+        path = _find_starnix()
+    if subdir is not None:
+        path = os.pathsep.join(map(_add_subdir, path.split(os.pathsep)))
+    return path
 
 
 def main():
