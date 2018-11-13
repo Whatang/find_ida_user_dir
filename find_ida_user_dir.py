@@ -6,6 +6,8 @@ Created on 14 Sep 2018
 import os
 import click
 
+_VERSION = "0.3.0"
+
 
 def _find_windows():
     path = os.getenv("APPDATA")
@@ -48,6 +50,7 @@ def find_path(subdir=None):
 
 
 @click.command()
+@click.version_option(_VERSION)
 @click.argument("subdir",
                 default="")
 def _main(subdir=""):
