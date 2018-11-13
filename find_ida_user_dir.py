@@ -4,6 +4,7 @@ Created on 14 Sep 2018
 @author: Mike Thomas
 '''
 import os
+import click
 
 
 def _find_windows():
@@ -19,37 +20,48 @@ def _find_starnix():
         return os.path.join(path, '.idapro')
 
 
-def _add_subdir(path, subdir):
-    return os.path.join(path, subdir)
-
-
 def find_path(subdir=None):
     """Find the IDA user directory for the current user on the current platform.
 
     Returns the path to the IDA user directory. No guarantee is made of the
-    existence of the directory, but is is the correct path as defined by the
+    existence of the directory, but it is the correct path as defined by the
     IDA documentation.
 
     If subdir is given then the path to that subdirectory of the IDA user
     directory is returned.
     """
-    path = os.getenv("IDAUSR")
-    if path:
-        pass
-    elif os.name == "nt":
-        path = _find_windows()
-    else:
-        path = _find_starnix()
-    if subdir is not None:
-        path = os.pathsep.join(_add_subdir(single_path, subdir)
-                               for single_path in path.split(os.pathsep))
+    path = None
+    try:
+        import ida_diskio
+        path = ida_diskio.get_user_idadir()
+    except ImportError:
+        path = os.getenv("IDAUSR")
+        if path:
+            path = path.split(os.path.pathsep)[0]
+        elif os.name == "nt":
+            path = _find_windows()
+        else:
+            path = _find_starnix()
+    if path and subdir:
+        path = os.path.join(path, subdir)
     return path
 
 
-def main():
-    path = find_path()
-    print path
+@click.command()
+@click.argument("subdir",
+                default="")
+def _main(subdir=""):
+    """Find the IDA user directory for the current user on the current platform.
+
+    Returns the path to the IDA user directory. No guarantee is made of the
+    existence of the directory, but it is the correct path as defined by the
+    IDA documentation.
+
+    If subdir is given then the path to that subdirectory of the IDA user
+    directory is returned.
+    """
+    click.echo(find_path(subdir))
 
 
 if __name__ == '__main__':
-    main()
+    _main()
